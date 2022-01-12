@@ -1,7 +1,8 @@
 class BMICalculator:
 
-    def __init__(self, bmi_table):
+    def __init__(self, bmi_table, average_height):
         self.bmi_table = bmi_table
+        self.average_height = average_height
 
     def get_category_and_risk(self, bmi):
 
@@ -21,8 +22,18 @@ class BMICalculator:
         idx = get_bmi_table_index(self.bmi_table, 0, len(self.bmi_table)-1, bmi)
         return self.bmi_table[idx]
 
-    @staticmethod
-    def calculate_bmi(height_cm, weight_kg, gender='Male'):
+    def refactor_bmi_with_height(function):
+        def inner(self, height, weight, gender='Male'):
+            bmi = function(self, height, weight, gender)
+            if height < self.average_height:
+                bmi = bmi - bmi*0.1
+            elif height > self.average_height:
+                bmi = bmi + bmi*0.1
+            return bmi
+        return inner
+
+    @refactor_bmi_with_height
+    def calculate_bmi(self, height_cm, weight_kg, gender='Male'):
         # for now we are treating same formula to calculate bmi for Male and Female
         bmi = weight_kg/((height_cm/100)**2)
         return bmi

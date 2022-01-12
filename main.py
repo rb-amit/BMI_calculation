@@ -13,7 +13,7 @@ def main():
         bmi_table = fp.read()
         bmi_table = json.loads(bmi_table)
 
-    calculator = bmi_cal.BMICalculator(bmi_table)
+    calculator = bmi_cal.BMICalculator(bmi_table, average_height=171)
     bmi_human_bodies = []
     for i in range(len(human_body_data)):
         height_cm = human_body_data[i]['HeightCm']
